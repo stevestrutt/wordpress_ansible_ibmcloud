@@ -19,7 +19,7 @@
     dest: "{{ wordpress_directory }}/wp-salts.php"
     seuser: system_u
     setype: httpd_sys_script_exec_t
-    # changed force to yes to force rewrite of file when run more than once
+    # changed force to yes to force rewrite of file when run more than once 
     force: yes
   notify: restart httpd
   tags: wordpress
