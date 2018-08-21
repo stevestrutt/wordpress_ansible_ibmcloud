@@ -4,7 +4,7 @@ This file contains al notable changes to the mariadb Ansible role.
 
 This file adheres to the guidelines of <http://keepachangelog.com/>. Versioning follows [Semantic Versioning](http://semver.org/).
 
-## SPS - Updated sever_my.cnf file to support DB replication
+## SPS - Updated sever_my.cnf file to support DB replication 
 ## 2018-08-21
 
 
