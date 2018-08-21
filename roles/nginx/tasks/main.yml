@@ -1,0 +1,55 @@
+---
+# tasks file for nginx
+
+- name: epel-release
+  yum: name=epel-release state=present update_cache=yes
+  tags: [ 'packages' ] 
+
+- name: install nginx
+  yum: name=nginx state=present update_cache=yes
+  tags: [ 'packages' ] 
+
+- name: remove .conf if it already exists - workaround
+  file: path=/etc/nginx/sites-available/{{ item.key }}.conf state=absent
+  with_dict: "{{ sites }}"
+  tags: [ 'configure' ] 
+
+- name: ensure nginx started
+  service: name=nginx state=started enabled=yes
+  tags: [ 'configure' ] 
+
+- name: create sites-available
+  file: path=/etc/nginx/sites-available/ state=directory
+  tags: [ 'configure' ] 
+
+- name: configure application nginx site
+  template: src=nginx.conf.j2 dest=/etc/nginx/sites-available/{{ item.key }}.conf force=yes mode=0644
+  with_dict: "{{ sites }}"
+  notify: restart nginx
+  tags: [ 'configure' ] 
+
+- name: configure base nginx site to remove default server in nginx.conf
+  template: src=templates/nginx.conf dest=/etc/nginx/nginx.conf force=yes mode=0644
+  notify: restart nginx
+  tags: [ 'configure' ] 
+
+- name: get active sites
+  shell: ls -1 /etc/nginx/conf.d/
+  register: active 
+  # compare returned list with list of sites in defaults
+  # If no difference, show OK, 'changed' if a difference hence action to perform
+  changed_when: "active.stdout_lines != sites.keys()"
+  tags: [ 'configure' ] 
+
+- name: de-activate default nginx site
+  file: path=/etc/nginx/conf.d/{{ item }}.conf state=absent
+  with_items: active.stdout_lines
+  when: item not in sites
+  notify: restart nginx
+  tags: [ 'configure' ] 
+
+- name: activate nginx site
+  file: src=/etc/nginx/sites-available/{{ item.key }}.conf dest=/etc/nginx/conf.d/{{ item.key }}.conf state=link
+  with_dict: "{{ sites }}"
+  notify: restart nginx
+  tags: [ 'configure' ]  

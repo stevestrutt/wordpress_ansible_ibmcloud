@@ -1,0 +1,6 @@
+---
+# defaults file for nginx
+sites: 
+  lb01: 
+    frontend: 80
+    backend: 8080

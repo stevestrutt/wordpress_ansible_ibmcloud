@@ -1,0 +1,4 @@
+*.retry
+*.tfstate
+*vault.yml
+*terraform*

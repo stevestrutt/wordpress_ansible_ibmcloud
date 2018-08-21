@@ -1,0 +1,5 @@
+
+
+[control]
+control ansible_connection=local ansible_become=yes
+

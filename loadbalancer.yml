@@ -1,0 +1,13 @@
+---
+#  Installs nginx as a load-balancer
+#  Not currently used as IBM Cloud Load Balancer used on IBM platform
+
+  - hosts: loadbalancer
+    become: true
+    # pre_tasks:
+    #   - include: gateway.yml
+    roles:
+      - nginx 
+      
+
+   

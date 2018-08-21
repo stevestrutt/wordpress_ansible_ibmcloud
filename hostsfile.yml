@@ -1,0 +1,40 @@
+---
+# Add named server entries to hostsfile to make operations human readable
+# Author: Steve Strutt  steve_strutt@uk.ibm.com
+
+  # Update all hosts apart from control
+- hosts: all:!control
+  become: true
+  tasks:
+    - name: Add IP addresses to each host
+      lineinfile:
+        dest: /etc/hosts
+        regexp: "{{ item }}"
+        line: '{{ hostvars[item].ansible_host }} {{ item }}'
+        state: present
+      # omit adding control to all hosts file. Keyed off ansible_host def in inventory
+      when: hostvars[item].ansible_host is defined  
+      with_items: "{{ groups.all }}"
+
+
+# Hosts file updated on control to make non-Ansible operations with hosts easier
+# control treated separately as uses ansible vault for su password
+# control su password required to execute commands on MAC OSX.
+- hosts: control
+  gather_facts: no
+  become: true
+  vars: 
+    ansible_become_pass: '{{ su_password }}'
+  tasks:
+    - debug:
+        msg: ansible_become_pass
+    - debug: var=hostvars[inventory_hostname]
+    - name: Add IP address of all hosts control workstation
+      lineinfile:
+        dest: /etc/hosts
+        regexp: "{{ item }}"
+        line: '{{ hostvars[item].ansible_host }} {{ item }}'
+        state: present
+      # omit adding control to all hosts file. Keyed off no ansible_host def  
+      when: hostvars[item].ansible_host is defined  
+      with_items: "{{ groups.all }}"
