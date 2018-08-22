@@ -1,11 +1,14 @@
-# Wordpress_ansible
+# Wordpress_ansible_ibmcloud
 
-Demo ansible package to install Wordpress in a 3-tier configuration on Centos 7.x
- - nginx loadbalancer
+Demo ansible package to install Wordpress in a highly available 3-tier configuration on IBM Cloud
+ - IBM Cloud Load Balancer
  - httpd app server
  - mariadb 
 
- Intended for use with Terraform infrastructure automation on IBM Cloud. Executed from MacBook Air. 
+This pacakge supports two configuration options, 
+- Single site deployment of multiple httpd webservers with a single Mariadb database host with an IBM Cloud Load Balancer (CLB) as a local LB. 
+- Dual site high availability configuration, with webservers and DB's deployed in two data centers, each with CLBs, fronted by IBM Cloud Internet Services (CloudFlare) as a global load balancer. 
 
- Initial Terraformed environment on IBM Cloud.
-    Vyatta VRA deployed as a secure private enclosure with 3 private VLANs. 
+Deployment architecture is determined dynamically based on Ansible inventory file specifying two Mariadb servers in different data centers. The inventory file can be statically specified with manual deployment of hosts on IBM Cloud, or used with Ansible dynamic inventory with Terraform automated deployment of servers and LBs.  
+
+
