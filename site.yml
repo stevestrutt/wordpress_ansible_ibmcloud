@@ -11,20 +11,20 @@
 
   # configure hosts files with hostnames to improve readability and ease of human login access
   # to hosts
-- include: hostsfile.yml
+- import_playbook: hostsfile.yml
 
   # Install tools on control workstation for stack_status.yml
-- include: control.yml 
+- import_playbook: control.yml 
 
   # Setup Mariadb on Centos
-- include: database.yml
+- import_playbook: database.yml
 
   # Setup httpd webserver on Centos
-- include: webserver.yml
+- import_playbook: webserver.yml
 
   # execute setup of DB replication if more than one DB host found. Means there are two DCs.
 - import_playbook: dbrepl.yml
   when: ( ( groups['database'] | length ) == 2 )
 
   # load balancer excluded as using IBM Cloud Load Balancer in local DCs. 
-  #- include: loadbalancer.yml
+  #- import_playbook: loadbalancer.yml

@@ -8,10 +8,10 @@
 
 
 [loadbalancer]
-#lb101 ansible_host=10.72.58.87 ansible_user=root
+# lb101 ansible_host=10.72.58.87 ansible_user=root
 
 [webserver]
-#app101  ansible_host=10.72.58.78 ansible_user=root 
+#app101  ansible_host=10.72.58.78 ansible_user=root
 #app101  ansible_host=10.72.58.89 ansible_user=root 
 
 ### If second data center
